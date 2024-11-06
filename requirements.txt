@@ -2,5 +2,5 @@ streamlit
 scipy
 pandas
 numpy
-matplotlib.pyplot as plt
+matplotlib
 
