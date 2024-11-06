@@ -133,7 +133,7 @@ with t3:
     
 t1, t2, t3 = st.columns([0.6, 1, 0.6])
 with t2:
-    if a == 1:
+    if b == 1:
         plt.figure(figsize=(7, 2))
         plt.plot(t_gyro, norm_waveform_gyro, 'k')
         plt.plot([valor, valor], [0, 5], '--b')
@@ -141,7 +141,7 @@ with t2:
         plt.ylabel('Angular velocity (rad/s)')
         st.pyplot(plt)
 
-    if b == 1:
+    if a == 1:
         fig = plt.figure(figsize=(7, 2))
         plt.plot(t, norm_waveform, 'k')
         plt.plot([valor, valor], [0, 8], '--b')
