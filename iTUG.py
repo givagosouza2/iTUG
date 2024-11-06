@@ -29,7 +29,7 @@ c = 0
 
 with t1:
     uploaded_acc_iTUG = st.file_uploader(
-        "Carregue o arquivo de texto do acelerômetro", type=["txt"],)
+        "Load accelerometer file", type=["txt"],)
     if uploaded_acc_iTUG is not None:
         custom_separator = ';'
         df = pd.read_csv(uploaded_acc_iTUG, sep=custom_separator)
@@ -67,7 +67,7 @@ with t1:
                 break
 with t2:
     uploaded_gyro_iTUG = st.file_uploader(
-        "Carregue o arquivo de texto do giroscópio", type=["txt"],)
+        "Load gyroscope file", type=["txt"],)
     if uploaded_gyro_iTUG is not None:
         custom_separator = ';'
         df_gyro = pd.read_csv(uploaded_gyro_iTUG, sep=custom_separator)
@@ -110,7 +110,7 @@ with t2:
     
 with t3:
     uploaded_file = st.file_uploader(
-        "Carregue o arquivo da cinemática", type="csv")
+        "Load kinematic file", type="csv")
     if uploaded_file is not None:
         # Carregar o arquivo CSV sem cabeçalhos
         df = pd.read_csv(uploaded_file, header=None)
