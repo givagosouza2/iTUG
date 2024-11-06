@@ -64,73 +64,72 @@ with t1:
                 s = t[index]
                 t = t - t[index]
                 break
-        a = 1
+    a = 1
 
-        with t2:
-            uploaded_gyro_iTUG = st.file_uploader(
-                "Carregue o arquivo de texto do giroscópio", type=["txt"],)
-            if uploaded_gyro_iTUG is not None:
-                custom_separator = ';'
-                df_gyro = pd.read_csv(uploaded_gyro_iTUG, sep=custom_separator)
-                t_gyro = df_gyro.iloc[:, 0]
-                x_gyro = df_gyro.iloc[:, 1]
-                y_gyro = df_gyro.iloc[:, 2]
-                z_gyro = df_gyro.iloc[:, 3]
-                time_gyro = t_gyro
+with t2:
+    uploaded_gyro_iTUG = st.file_uploader(
+        "Carregue o arquivo de texto do giroscópio", type=["txt"],)
+    if uploaded_gyro_iTUG is not None:
+        custom_separator = ';'
+        df_gyro = pd.read_csv(uploaded_gyro_iTUG, sep=custom_separator)
+        t_gyro = df_gyro.iloc[:, 0]
+        x_gyro = df_gyro.iloc[:, 1]
+        y_gyro = df_gyro.iloc[:, 2]
+        z_gyro = df_gyro.iloc[:, 3]
+        time_gyro = t_gyro
 
-                x_gyro = signal.detrend(x_gyro)
-                y_gyro = signal.detrend(y_gyro)
-                z_gyro = signal.detrend(z_gyro)
+        x_gyro = signal.detrend(x_gyro)
+        y_gyro = signal.detrend(y_gyro)
+        z_gyro = signal.detrend(z_gyro)
 
-                interpf = scipy.interpolate.interp1d(time_gyro, x_gyro)
-                time_gyro_ = np.arange(
-                    start=time_gyro[0], stop=time_gyro[len(time_gyro)-1], step=10)
-                x_gyro_ = interpf(time_gyro_)
-                t_gyro, x_gyro = time_gyro_/1000, x_gyro_
-                interpf = scipy.interpolate.interp1d(time_gyro, y_gyro)
-                time_gyro_ = np.arange(
-                    start=time_gyro[0], stop=time_gyro[len(time_gyro)-1], step=10)
-                y_gyro_ = interpf(time_gyro_)
-                t_gyro, y_gyro = time_gyro_/1000, y_gyro_
-                interpf = scipy.interpolate.interp1d(time_gyro, z_gyro)
-                time_gyro_ = np.arange(
-                    start=time_gyro[0], stop=time_gyro[len(time_gyro)-1], step=10)
-                z_gyro_ = interpf(time_gyro_)
-                t_gyro, z_gyro = time_gyro_/1000, z_gyro_
+        interpf = scipy.interpolate.interp1d(time_gyro, x_gyro)
+        time_gyro_ = np.arange(
+            start=time_gyro[0], stop=time_gyro[len(time_gyro)-1], step=10)
+        x_gyro_ = interpf(time_gyro_)
+        t_gyro, x_gyro = time_gyro_/1000, x_gyro_
+        interpf = scipy.interpolate.interp1d(time_gyro, y_gyro)
+        time_gyro_ = np.arange(
+            start=time_gyro[0], stop=time_gyro[len(time_gyro)-1], step=10)
+        y_gyro_ = interpf(time_gyro_)
+        t_gyro, y_gyro = time_gyro_/1000, y_gyro_
+        interpf = scipy.interpolate.interp1d(time_gyro, z_gyro)
+        time_gyro_ = np.arange(
+            start=time_gyro[0], stop=time_gyro[len(time_gyro)-1], step=10)
+        z_gyro_ = interpf(time_gyro_)
+        t_gyro, z_gyro = time_gyro_/1000, z_gyro_
 
-                norm_waveform_gyro = np.sqrt(x_gyro**2+y_gyro**2+z_gyro**2)
-                norm_waveform_gyro = butterworth_filter(
-                    norm_waveform_gyro, 1.5, 100, order=2, btype='low')
+        norm_waveform_gyro = np.sqrt(x_gyro**2+y_gyro**2+z_gyro**2)
+        norm_waveform_gyro = butterworth_filter(
+            norm_waveform_gyro, 1.5, 100, order=2, btype='low')
 
-                for index, value in enumerate(norm_waveform_gyro):
-                    if value == np.max(norm_waveform_gyro):
-                        s_gyro = t_gyro[index]
-                        t_gyro = t_gyro - t_gyro[index]
-                        break
-                b = 1
-                with t3:
-                    c = c + 1
-                    uploaded_file = st.file_uploader(
-                        "Carregue o arquivo da cinemática", type="csv")
-                    if uploaded_file is not None:
-                        # Carregar o arquivo CSV sem cabeçalhos
-                        df = pd.read_csv(uploaded_file, header=None)
+        for index, value in enumerate(norm_waveform_gyro):
+            if value == np.max(norm_waveform_gyro):
+                s_gyro = t_gyro[index]
+                t_gyro = t_gyro - t_gyro[index]
+                break
+    b = 1
+with t3:
+    uploaded_file = st.file_uploader(
+        "Carregue o arquivo da cinemática", type="csv")
+    if uploaded_file is not None:
+        # Carregar o arquivo CSV sem cabeçalhos
+        df = pd.read_csv(uploaded_file, header=None)
 
-                        # Verificar se o DataFrame tem pelo menos 12 colunas
-                        if df.shape[1] >= 12:
-                            # Extrair os dados das colunas 11 e 12 (indexadas como 10 e 11)
-                            coluna_11 = df.iloc[:, 10].values
-                            coluna_12 = df.iloc[:, 11].values
+        # Verificar se o DataFrame tem pelo menos 12 colunas
+        if df.shape[1] >= 12:
+            # Extrair os dados das colunas 11 e 12 (indexadas como 10 e 11)
+            coluna_11 = df.iloc[:, 10].values
+            coluna_12 = df.iloc[:, 11].values
 
-                            # Criar um vetor temporal com base no tamanho da coluna 11
-                            vetor_temporal = np.arange(len(coluna_11))/100
-                            for index, value in enumerate(coluna_12):
-                                if value == np.max(coluna_12):
-                                    s = vetor_temporal[index]
-                                    vetor_temporal = vetor_temporal - \
-                                        vetor_temporal[index]
-                                    break
-                            c = 1
+            # Criar um vetor temporal com base no tamanho da coluna 11
+            vetor_temporal = np.arange(len(coluna_11))/100
+            for index, value in enumerate(coluna_12):
+                if value == np.max(coluna_12):
+                    s = vetor_temporal[index]
+                    vetor_temporal = vetor_temporal - \
+                        vetor_temporal[index]
+                    break
+    c = 1
 t1, t2, t3 = st.columns([0.6, 1, 0.6])
 with t2:
     if a == 1:
