@@ -63,9 +63,8 @@ with t1:
             if value == np.max(norm_waveform):
                 s = t[index]
                 t = t - t[index]
+                a = 1
                 break
-    a = 1
-
 with t2:
     uploaded_gyro_iTUG = st.file_uploader(
         "Carregue o arquivo de texto do giroscópio", type=["txt"],)
@@ -106,8 +105,9 @@ with t2:
             if value == np.max(norm_waveform_gyro):
                 s_gyro = t_gyro[index]
                 t_gyro = t_gyro - t_gyro[index]
+                b = 1
                 break
-    b = 1
+    
 with t3:
     uploaded_file = st.file_uploader(
         "Carregue o arquivo da cinemática", type="csv")
@@ -128,8 +128,9 @@ with t3:
                     s = vetor_temporal[index]
                     vetor_temporal = vetor_temporal - \
                         vetor_temporal[index]
+                    c = 1
                     break
-    c = 1
+    
 t1, t2, t3 = st.columns([0.6, 1, 0.6])
 with t2:
     if a == 1:
