@@ -99,15 +99,7 @@ with t2:
 
         norm_waveform_gyro = np.sqrt(x_gyro**2+y_gyro**2+z_gyro**2)
         norm_waveform_gyro = butterworth_filter(
-            norm_waveform_gyro, 1.5, 100, order=2, btype='low')
-
-        for index, value in enumerate(norm_waveform_gyro):
-            if value == np.max(norm_waveform_gyro):
-                s_gyro = t_gyro[index]
-                t_gyro = t_gyro - t_gyro[index]
-                b = 1
-                break
-    
+            norm_waveform_gyro, 1.5, 100, order=2, btype='low')    
 with t3:
     uploaded_file = st.file_uploader(
         "Load kinematic file", type="csv")
@@ -135,7 +127,7 @@ t1, t2, t3 = st.columns([0.6, 1, 0.6])
 with t2:
     if b == 1:
         plt.figure(figsize=(7, 2))
-        plt.plot(t_gyro, norm_waveform_gyro, 'k')
+        plt.plot(t, norm_waveform_gyro, 'k')
         plt.plot([valor, valor], [0, 5], '--b')
         plt.xlabel('Time (s)')
         plt.ylabel('Angular velocity (rad/s)')
